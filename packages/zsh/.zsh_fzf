@@ -1,0 +1,50 @@
+dir_preview="eza --tree --color=always --icons --group-directories-first --git-ignore -I \"node_modules|dist|build|coverage|.next\" {} | head -200"
+file_preview="batcat -n --color=always --line-range :500 {}"
+show_file_or_dir_preview="if [ -d {} ]; then $dir_preview; else $file_preview; fi"
+
+
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --exclude .git --exclude node_modules --exclude dist --exclude /mnt/c"
+export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,.next,dist --ansi"
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview '$dir_preview'"
+export ZSH_AUTOSUGGEST_MANUAL_REBIND="true"
+export FZF_CTRL_R_OPTS="
+  --bind 'tab:accept'
+"
+
+
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview "$dir_preview" "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
+
+_glow_readme_complete() {
+  # Lista arquivos README usando fd
+  local -a files
+  files=("${(@f)$(fd -H -t f -i 'readme' .)}")
+
+  _describe 'README files' files
+}
+
+
+compdef _glow_readme_complete glow
+
+
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+zstyle ':fzf-tab:complete:*:*' fzf-preview \
+  "[[ -e \$realpath ]] &&  preview"' $realpath || echo $desc'
+zstyle ':fzf-tab:complete:(kill|ps|top):argument-rest' fzf-preview \
+  '[[ $group == "[process ID]"  ]] && ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:(kill|ps|top):argument-rest' fzf-flags \
+  --preview-window='up:3:wrap' --height 100% --layout=default --border
+zstyle ':completion:*:kill:*' ignored-patterns '0'
+zstyle ':fzf-tab:complete:glow:*' fzf-preview \
+  "[[ -e \$word ]] &&  preview"' $word || echo $desc'

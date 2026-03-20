@@ -1,0 +1,19 @@
+*.local
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.kdbx
+
+# Third-party/plugin code must stay out of dotfiles repo
+**/.tmux/plugins/
+**/.oh-my-zsh/
+**/.config/nvim/lazy/
+**/.config/nvim/pack/
+**/.vscode/extensions/
+**/.vscode-server/
+**/.vscode-server/extensions/

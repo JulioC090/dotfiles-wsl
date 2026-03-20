@@ -1,0 +1,6 @@
+alias ls="eza -l --color --icons --git --hyperlink --group-directories-first --no-permissions --no-filesize --no-user --no-time"
+alias bat="batcat"
+alias zshrc="nano ~/.zshrc"
+alias tmux.conf="nano ~/.tmux.conf"
+alias cd="z"
+alias cls="clear"

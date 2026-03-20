@@ -1,0 +1,45 @@
+explorer() {  # Open current or specific directory in Windows Explorer
+  p=${1:-"."}
+  explorer.exe $(wslpath -w "$p")
+}
+
+extract() {
+  local file="$1"
+
+  # Check if file exists
+  if [[ ! -f "$file" ]]; then
+    echo "File not found: $file"
+    return 1
+  fi
+
+  # Build output directory name (remove extensions)
+  local base="${file##*/}"
+  local folder="${base%%.*}"
+
+  # Create directory
+  mkdir -p "$folder" || return 1
+  cd "$folder" || return 1
+
+  # Extract based on extension
+  case "$file" in
+    *.tar.bz2)  tar xjf "../$file" ;;
+    *.tar.gz)   tar xzf "../$file" ;;
+    *.tar.xz)   tar xJf "../$file" ;;
+    *.tar)      tar xf "../$file" ;;
+    *.tbz2)     tar xjf "../$file" ;;
+    *.tgz)      tar xzf "../$file" ;;
+    *.gz)       gunzip "../$file" ;;
+    *.xz)       unxz "../$file" ;;
+    *.rar)      unrar x "../$file" ;;
+    *.zip)      unzip "../$file" ;;
+    *.7z)       7z x "../$file" ;;
+    *)
+      echo "Unsupported file type: $file"
+      cd ..
+      return 1
+      ;;
+  esac
+
+  echo "Extracted to: $PWD"
+}
+
