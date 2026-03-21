@@ -35,4 +35,12 @@ done
 echo "==> Applying dotfiles with stow"
 stow "${STOW_PACKAGES[@]}"
 
+echo "==> Running package post-install scripts"
+for dir in packages/*; do
+  if [ -f "$dir/post-install.sh" ]; then
+    echo "==> Running $dir/post-install.sh"
+    bash "$dir/post-install.sh"
+  fi
+done
+
 echo "Setup completed"
