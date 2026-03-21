@@ -29,7 +29,7 @@ for pkg in "${STOW_PACKAGES[@]}"; do
         rm -f "$target_path"
       fi
     fi
-  done < <(find "packages/$pkg" -mindepth 1 -type f ! -name "setup.sh" ! -name "README.md" ! -name ".gitkeep" ! -name ".fzf.bash" ! -name ".fzf.zsh")
+  done < <(find "packages/$pkg" -mindepth 1 -type f ! -name "setup.sh" ! -name "README.md" ! -name ".gitkeep")
 done
 
 echo "==> Applying dotfiles with stow"
