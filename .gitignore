@@ -1,4 +1,3 @@
-*.local
 .env
 .env.*
 *.pem
@@ -15,5 +14,3 @@
 **/.config/nvim/lazy/
 **/.config/nvim/pack/
 **/.vscode/extensions/
-**/.vscode-server/
-**/.vscode-server/extensions/

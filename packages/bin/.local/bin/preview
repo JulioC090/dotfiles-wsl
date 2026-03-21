@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+_preview() {
+  local file="$1"
+  if [[ -d "${file}" ]] || [[ -h "${file}" ]]; then
+    eza --tree --color=always --icons --group-directories-first --git-ignore -I "node_modules|dist|build|coverage|.next" "${file}"
+  elif [[ -f "${file}" ]]; then
+    batcat -n --color=always --line-range :500 "${file}"
+  fi	
+}
+
+_preview "$@"
