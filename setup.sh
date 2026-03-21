@@ -6,6 +6,8 @@ sudo apt update
 sudo apt full-upgrade -y
 sudo apt autoremove --purge -y
 
+sudo apt install -y stow
+
 echo "==> Running package setups"
 for dir in packages/*; do
   if [ -f "$dir/setup.sh" ]; then
