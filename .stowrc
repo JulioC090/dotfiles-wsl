@@ -1,2 +1,5 @@
 --target=$HOME
 --dir=packages
+--ignore=setup\.sh
+--ignore=README\.md
+--ignore=\.gitkeep
