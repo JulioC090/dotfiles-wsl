@@ -8,6 +8,8 @@ sudo apt autoremove --purge -y
 
 sudo apt install -y stow
 
+PACKAGES=(bash git zsh tmux bin vscode)
+
 echo "==> Running package setups"
 for dir in packages/*; do
   if [ -f "$dir/setup.sh" ]; then
@@ -16,7 +18,21 @@ for dir in packages/*; do
   fi
 done
 
+echo "==> Cleaning conflicting files before stow"
+for pkg in "${PACKAGES[@]}"; do
+  while IFS= read -r entry; do
+    rel_path="${entry#packages/$pkg/}"
+    target_path="$HOME/$rel_path"
+
+    if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+      if [ ! -d "$target_path" ]; then
+        rm -f "$target_path"
+      fi
+    fi
+  done < <(find "packages/$pkg" -mindepth 1 -type f ! -name "setup.sh" ! -name "README.md" ! -name ".gitkeep")
+done
+
 echo "==> Applying dotfiles with stow"
-stow bash git zsh tmux bin vscode
+stow "${PACKAGES[@]}"
 
 echo "Setup completed"

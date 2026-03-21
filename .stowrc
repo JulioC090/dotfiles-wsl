@@ -1,6 +1,6 @@
 --target=$HOME
 --dir=packages
 --ignore=setup\.sh
+--ignore=post-install\.sh
 --ignore=README\.md
 --ignore=\.gitkeep
---overwrite
