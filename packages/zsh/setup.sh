@@ -30,4 +30,31 @@ ensure_clone "https://github.com/ntnyq/omz-plugin-pnpm.git" "$ZSH_CUSTOM/plugins
 ensure_clone "https://github.com/MichaelAquilina/zsh-you-should-use.git" "$ZSH_CUSTOM/plugins/you-should-use"
 ensure_clone "https://github.com/Aloxaf/fzf-tab.git" "$ZSH_CUSTOM/plugins/fzf-tab"
 
+echo "==> [zsh] Installing pnpm-shell-completion"
+if [ ! -d "$ZSH_CUSTOM/plugins/pnpm-shell-completion" ]; then
+  TMP_DIR="$(mktemp -d)"
+  cleanup() {
+    rm -rf "$TMP_DIR"
+  }
+  trap cleanup EXIT
+
+  curl -L -o "$TMP_DIR/pnpm-sugestion.zip" "https://github.com/g-plane/pnpm-shell-completion/releases/download/v0.5.5/pnpm-shell-completion_x86_64-unknown-linux-gnu.tar.gz"
+  tar -xzf "$TMP_DIR/pnpm-sugestion.zip" -C "$TMP_DIR"
+
+  INSTALLER_PATH="$(find "$TMP_DIR" -type f -name install.zsh | head -n 1)"
+  if [ -z "$INSTALLER_PATH" ]; then
+    echo "pnpm-shell-completion installer not found after extraction"
+    exit 1
+  fi
+
+  INSTALLER_DIR="$(dirname "$INSTALLER_PATH")"
+  (
+    cd "$INSTALLER_DIR"
+    ./install.zsh "$ZSH_CUSTOM/plugins"
+  )
+
+  trap - EXIT
+  cleanup
+fi
+
 echo "==> [zsh] Done"
