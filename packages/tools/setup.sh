@@ -2,7 +2,13 @@
 set -euo pipefail
 
 echo "==> [tools] Installing apt tools"
-sudo apt install -y eza bat fd-find zoxide fzf curl git libatomic1
+sudo apt install -y eza bat fd-find zoxide curl git libatomic1
+
+echo "==> [tools] Installing fzf"
+if [ ! -d "$HOME/.fzf/.git" ]; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+fi
+"$HOME/.fzf/install" --key-bindings --completion --no-update-rc
 
 echo "==> [tools] Linking fd -> fdfind if needed"
 mkdir -p "$HOME/.local/bin"
