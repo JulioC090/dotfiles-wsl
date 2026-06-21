@@ -1,10 +1,3 @@
-if ! tmux ls >/dev/null 2>&1; then
-  sh -c '
-    tmux new -ds main
-    tmux -c "~/.tmux/plugins/tmux-continuum/scripts/continuum_restore.sh"
-  '
-fi
-
 [[ -o interactive ]] || return
 (( $+commands[tmux] )) || return
 [[ -n "$TMUX" && "$TERM_PROGRAM" == "tmux" ]] && return
