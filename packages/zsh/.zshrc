@@ -63,3 +63,13 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# bun completions
+[ -s "/home/julio/.bun/_bun" ] && source "/home/julio/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# opencode
+export PATH=$HOME/.opencode/bin:$PATH
